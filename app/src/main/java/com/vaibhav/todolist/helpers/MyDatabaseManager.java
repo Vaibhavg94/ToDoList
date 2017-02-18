@@ -27,7 +27,7 @@ public class MyDatabaseManager {
         dbHelper.close();
     }
 
-    public void insert(String title, String description, String date, String status) {
+    public void insert(String title, String description, String date, Integer status) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MyDatabaseHelper.COLUMN_TITLE, title);
         contentValues.put(MyDatabaseHelper.COLUMN_DESCRIPTION, description);
@@ -36,11 +36,20 @@ public class MyDatabaseManager {
         sqLiteDatabase.insert(MyDatabaseHelper.TABLE_TODO, null, contentValues);
     }
 
-    public Cursor fetch(String status) {
+    public Cursor fetch(Integer status) {
         String[] columns = new String[]{MyDatabaseHelper.COLUMN_ID, MyDatabaseHelper.COLUMN_TITLE, MyDatabaseHelper.COLUMN_DESCRIPTION, MyDatabaseHelper.COLUMN_DATE, MyDatabaseHelper.COLUMN_STATUS};
         Cursor cursor = sqLiteDatabase.query(MyDatabaseHelper.TABLE_TODO, columns, MyDatabaseHelper.COLUMN_STATUS + "=" + status, null, null, null, MyDatabaseHelper.COLUMN_DATE + " ASC");
         if (cursor != null) {
-            cursor.moveToFirst();
+//            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor fetch() {
+        String[] columns = new String[]{MyDatabaseHelper.COLUMN_ID, MyDatabaseHelper.COLUMN_TITLE, MyDatabaseHelper.COLUMN_DESCRIPTION, MyDatabaseHelper.COLUMN_DATE, MyDatabaseHelper.COLUMN_STATUS};
+        Cursor cursor = sqLiteDatabase.query(MyDatabaseHelper.TABLE_TODO, columns, null, null, null, null, MyDatabaseHelper.COLUMN_DATE + " ASC");
+        if (cursor != null) {
+//            cursor.moveToFirst();
         }
         return cursor;
     }

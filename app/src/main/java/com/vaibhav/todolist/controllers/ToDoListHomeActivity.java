@@ -1,7 +1,6 @@
 package com.vaibhav.todolist.controllers;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -45,15 +44,24 @@ public class ToDoListHomeActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                MyDatabaseManager db = new MyDatabaseManager(getApplicationContext()).open();
+                MyDatabaseManager myDatabaseManager = new MyDatabaseManager(getApplicationContext()).open();
+
                 final String idText = ((TextView) view.findViewById(R.id.taskId)).getText().toString();
+                final String statusText = ((TextView) view.findViewById(R.id.taskStatus)).getText().toString();
                 final String titleText = ((TextView) view.findViewById(R.id.title)).getText().toString();
                 final String descriptionText = ((TextView) view.findViewById(R.id.description)).getText().toString();
                 final String dateText = ((TextView) view.findViewById(R.id.timestamp)).getText().toString();
-                db.update(Integer.parseInt(String.valueOf(idText)), titleText, descriptionText, dateText, 1);
-                Toast.makeText(ToDoListHomeActivity.this, "This task is marked completed.", Toast.LENGTH_SHORT).show();
+
+                if (Objects.equals(statusText, "0")) {
+                    myDatabaseManager.update(Integer.parseInt(String.valueOf(idText)), titleText, descriptionText, dateText, 1);
+                    Toast.makeText(ToDoListHomeActivity.this, "This task is marked complete.", Toast.LENGTH_SHORT).show();
+                } else {
+                    myDatabaseManager.update(Integer.parseInt(String.valueOf(idText)), titleText, descriptionText, dateText, 0);
+                    Toast.makeText(ToDoListHomeActivity.this, "This task is marked incomplete.", Toast.LENGTH_SHORT).show();
+                }
+
                 updateUI();
-                db.close();
+                myDatabaseManager.close();
                 return true;
             }
         });
@@ -86,7 +94,13 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                 int dayOfMonth = Integer.parseInt(dateText.substring(0, 2));
                 date.init(year, monthOfYear, dayOfMonth, null);
 
-                dialog.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton("Add", null);
+                dialog.setNegativeButton("Cancel", null);
+
+                final AlertDialog alertDialog = dialog.create();
+                alertDialog.show();
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 
                     String getDate() {
                         StringBuilder builder = new StringBuilder();
@@ -101,11 +115,11 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v) {
                         if (titleText.equals("")) {
-                            title.setError("Must have a title, it cannot be empty.");
+                            title.setError("Title cannot be empty.");
                         } else if (descriptionText.equals("")) {
-                            description.setError("Must have a description, it cannot be empty.");
+                            description.setError("Description cannot be empty.");
                         } else {
                             String date = getDate();
                             final MyDatabaseManager myDatabaseManager = new MyDatabaseManager(getApplicationContext());
@@ -113,12 +127,10 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                             myDatabaseManager.update(Integer.parseInt(String.valueOf(taskEditId.getText())), title.getText().toString(), description.getText().toString(), date, 0);
                             myDatabaseManager.close();
                             updateUI();
+                            alertDialog.hide();
                         }
                     }
                 });
-                dialog.setNegativeButton("Cancel", null);
-                dialog.create();
-                dialog.show();
             }
         });
 
@@ -146,7 +158,13 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                 final EditText description = (EditText) inflaterView.findViewById(R.id.input_description);
                 final DatePicker date = (DatePicker) inflaterView.findViewById(R.id.datePicker);
 
-                dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton("Add", null);
+                dialog.setNegativeButton("Cancel", null);
+
+                final AlertDialog alertDialog = dialog.create();
+                alertDialog.show();
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 
                     String getDate() {
                         StringBuilder builder = new StringBuilder();
@@ -161,34 +179,34 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (title.getText().toString().trim().length() == 0 && description.getText().toString().trim().length() == 0) {
-                            title.setError("Must have a title, it cannot be empty.");
-                            description.setError("Must have a description, it cannot be empty.");
-                            Toast.makeText(ToDoListHomeActivity.this, "Title and description cannot be empty.", Toast.LENGTH_SHORT).show();
-                        } else if (title.getText().toString().trim().length() == 0) {
-                            title.setError("Must have a title, it cannot be empty.");
-                            Toast.makeText(ToDoListHomeActivity.this, "Title cannot be empty.", Toast.LENGTH_SHORT).show();
-                        } else if (description.getText().toString().trim().length() == 0) {
-                            description.setError("Must have a description, it cannot be empty.");
-                            Toast.makeText(ToDoListHomeActivity.this, "Description cannot be empty.", Toast.LENGTH_SHORT).show();
+                    public void onClick(View v) {
+                        if (Objects.equals(title.getText().toString(), "") && Objects.equals(description.getText().toString(), "")) {
+                            title.setError("Title cannot be empty.");
+                            description.setError("Description cannot be empty.");
+                        } else if (Objects.equals(title.getText().toString(), "")) {
+                            title.setError("Title cannot be empty.");
+                        } else if (Objects.equals(description.getText().toString(), "")) {
+                            description.setError("Description cannot be empty.");
                         } else {
                             String date = getDate();
                             final MyDatabaseManager myDatabaseManager = new MyDatabaseManager(getApplicationContext());
                             myDatabaseManager.open();
-                            myDatabaseManager.insert(title.getText().toString(), description.getText().toString(), date, "0");
+                            myDatabaseManager.insert(title.getText().toString(), description.getText().toString(), date, 0);
                             myDatabaseManager.close();
+                            alertDialog.dismiss();
                             updateUI();
+                            Toast.makeText(ToDoListHomeActivity.this, "New Task created.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                dialog.setNegativeButton("Cancel", null);
-                dialog.create();
-                dialog.show();
                 return true;
             case R.id.complete:
                 Intent intent = new Intent(ToDoListHomeActivity.this, CompletedTaskActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.help:
+                Intent intent1 = new Intent(ToDoListHomeActivity.this, HelpActivity.class);
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -198,7 +216,7 @@ public class ToDoListHomeActivity extends AppCompatActivity {
     private void updateUI() {
         MyDatabaseManager db = new MyDatabaseManager(getApplicationContext()).open();
 
-        Cursor cursor = db.fetch("0");
+        Cursor cursor = db.fetch();
 
         ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<String> title = new ArrayList<>();

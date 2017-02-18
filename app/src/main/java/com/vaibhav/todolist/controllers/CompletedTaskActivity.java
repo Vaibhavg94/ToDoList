@@ -17,7 +17,6 @@ import com.vaibhav.todolist.helpers.MyDatabaseHelper;
 import com.vaibhav.todolist.helpers.MyDatabaseManager;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class CompletedTaskActivity extends AppCompatActivity {
@@ -65,7 +64,7 @@ public class CompletedTaskActivity extends AppCompatActivity {
 
     private void updateUI() {
         MyDatabaseManager db = new MyDatabaseManager(getApplicationContext()).open();
-        Cursor cursor = db.fetch("1");
+        Cursor cursor = db.fetch(1);
         final ArrayList<Integer> id = new ArrayList<>();
         final ArrayList<String> title = new ArrayList<>();
         ArrayList<String> description = new ArrayList<>();

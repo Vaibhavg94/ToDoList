@@ -7,4 +7,6 @@
     <string name="complete_task">Complete Task</string>
     <string name="date">Date</string>
     <string name="task_id">taskId</string>
+    <string name="task_status">taskStatus</string>
+    <string name="help">help</string>
 </resources>

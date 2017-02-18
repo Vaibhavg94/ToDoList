@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fbffcd"
+    android:background="#e9c5bd"
     android:orientation="vertical">
 
     <TextView
@@ -14,11 +14,19 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/taskStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/task_status"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
-        android:background="#4cd6e6"
+        android:background="#ec736a"
         android:padding="10dp"
         android:text="@string/date"
         android:textAlignment="center" />

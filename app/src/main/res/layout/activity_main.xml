@@ -5,16 +5,25 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#fde5e5"
     tools:context="com.vaibhav.todolist.controllers.ToDoListHomeActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="#dad6d6"
+        android:background="#f7574b"
         android:elevation="10dp"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/help_list"
+        android:layout_below="@id/toolbar"
+        android:textColor="#635c5c"
+        android:layout_margin="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
 
     <ListView
         android:id="@+id/list_todo"

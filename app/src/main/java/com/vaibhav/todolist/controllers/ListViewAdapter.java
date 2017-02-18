@@ -37,7 +37,7 @@ class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return title.size();
+        return taskIds.size();
     }
 
     @Override
@@ -58,6 +58,7 @@ class ListViewAdapter extends BaseAdapter {
         TextView textViewDescription;
         ImageView statusView;
         TextView textViewDuedate;
+        TextView textViewStatus;
     }
 
     @Override
@@ -69,6 +70,7 @@ class ListViewAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.row, null);
             holder = new ViewHolder();
             holder.textViewId = (TextView) view.findViewById(R.id.taskId);
+            holder.textViewStatus = (TextView) view.findViewById(R.id.taskStatus);
             holder.textViewDate = (TextView) view.findViewById(R.id.date);
             holder.textViewTitle = (TextView) view.findViewById(R.id.title);
             holder.textViewDescription = (TextView) view.findViewById(R.id.description);
@@ -78,14 +80,14 @@ class ListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.textViewId.setText(taskIds.get(position).toString());
+        holder.textViewId.setText(String.valueOf(taskIds.get(position)));
+        holder.textViewStatus.setText(String.valueOf(status.get(position)));
         holder.textViewDate.setText(date.get(position));
         holder.textViewTitle.setText(title.get(position));
         holder.textViewDescription.setText(description.get(position));
-        if(status.get(position)==0){
+        if (status.get(position) == 0) {
             holder.statusView.setImageResource(R.drawable.ic_action_inc);
-        }
-        else{
+        } else {
             holder.statusView.setImageResource(R.drawable.ic_action_comp);
         }
         holder.textViewDuedate.setText(date.get(position));
