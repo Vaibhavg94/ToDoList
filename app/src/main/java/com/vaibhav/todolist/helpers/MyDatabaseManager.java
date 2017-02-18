@@ -40,7 +40,6 @@ public class MyDatabaseManager {
         String[] columns = new String[]{MyDatabaseHelper.COLUMN_ID, MyDatabaseHelper.COLUMN_TITLE, MyDatabaseHelper.COLUMN_DESCRIPTION, MyDatabaseHelper.COLUMN_DATE, MyDatabaseHelper.COLUMN_STATUS};
         Cursor cursor = sqLiteDatabase.query(MyDatabaseHelper.TABLE_TODO, columns, MyDatabaseHelper.COLUMN_STATUS + "=" + status, null, null, null, MyDatabaseHelper.COLUMN_DATE + " ASC");
         if (cursor != null) {
-//            cursor.moveToFirst();
         }
         return cursor;
     }
@@ -49,7 +48,6 @@ public class MyDatabaseManager {
         String[] columns = new String[]{MyDatabaseHelper.COLUMN_ID, MyDatabaseHelper.COLUMN_TITLE, MyDatabaseHelper.COLUMN_DESCRIPTION, MyDatabaseHelper.COLUMN_DATE, MyDatabaseHelper.COLUMN_STATUS};
         Cursor cursor = sqLiteDatabase.query(MyDatabaseHelper.TABLE_TODO, columns, null, null, null, null, MyDatabaseHelper.COLUMN_DATE + " ASC");
         if (cursor != null) {
-//            cursor.moveToFirst();
         }
         return cursor;
     }
