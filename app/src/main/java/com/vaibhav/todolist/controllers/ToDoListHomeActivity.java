@@ -127,6 +127,7 @@ public class ToDoListHomeActivity extends AppCompatActivity {
                             myDatabaseManager.update(Integer.parseInt(String.valueOf(taskEditId.getText())), title.getText().toString(), description.getText().toString(), date, 0);
                             myDatabaseManager.close();
                             updateUI();
+                            Toast.makeText(ToDoListHomeActivity.this, "Task is updated.", Toast.LENGTH_SHORT).show();
                             alertDialog.hide();
                         }
                     }
